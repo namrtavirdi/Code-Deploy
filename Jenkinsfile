@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        DEPLOY_PATH = "C:\\Deploy"
-    }
-
     stages {
 
         stage('Checkout') {
@@ -13,19 +9,16 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Local Server') {
             steps {
                 script {
-
                     def branch = env.GIT_BRANCH.tokenize('/').last()
 
                     bat """
-                    if not exist "%DEPLOY_PATH%\\${branch}" mkdir "%DEPLOY_PATH%\\${branch}"
+                    if not exist "C:\\Deploy\\${branch}" mkdir "C:\\Deploy\\${branch}"
 
-                    xcopy * "%DEPLOY_PATH%\\${branch}\\" /E /Y /I
+                    xcopy /E /I /Y * "C:\\Deploy\\${branch}\\"
                     """
-
-                    echo "Deployment completed to ${branch}"
                 }
             }
         }
