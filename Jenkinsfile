@@ -1,24 +1,36 @@
 pipeline {
     agent any
 
+    environment {
+        DEPLOY_PATH = "C:\\Deploy"
+    }
+
     stages {
 
-        stage('Clone Source') {
+        stage('Checkout') {
             steps {
-                echo 'Repository cloned by Jenkins.'
+                checkout scm
             }
         }
 
-        stage('Deploy to Local Server') {
+        stage('Deploy') {
             steps {
-                bat '''
-                if not exist "C:\\Deploy" mkdir "C:\\Deploy"
-                xcopy /E /I /Y * "C:\\Deploy\\"
-                '''
+                script {
+
+                    def branch = env.GIT_BRANCH.tokenize('/').last()
+
+                    bat """
+                    if not exist "%DEPLOY_PATH%\\${branch}" mkdir "%DEPLOY_PATH%\\${branch}"
+
+                    xcopy * "%DEPLOY_PATH%\\${branch}\\" /E /Y /I
+                    """
+
+                    echo "Deployment completed to ${branch}"
+                }
             }
         }
 
-        stage('Verify Deployment') {
+        stage('Verify') {
             steps {
                 bat 'dir C:\\Deploy'
             }
