@@ -2,12 +2,24 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Deploy to Local Server') {
             steps {
-                bat '''
-                if not exist "C:\\Deploy" mkdir "C:\\Deploy"
-                xcopy /E /I /Y * "C:\\Deploy\\"
-                '''
+                script {
+                    def branch = env.GIT_BRANCH.tokenize('/').last()
+
+                    bat """
+                    if not exist "C:\\Deploy\\${branch}" mkdir "C:\\Deploy\\${branch}"
+
+                    xcopy /E /I /Y * "C:\\Deploy\\${branch}\\"
+                    """
+                }
             }
         }
 
