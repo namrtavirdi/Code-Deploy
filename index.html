@@ -1,1 +1,84 @@
-Webhook Test 1
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Environment</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            width: 600px;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #444;
+        }
+
+        p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: gray;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 Development Environment</h1>
+
+    <h2>GitHub → Jenkins → IIS Deployment</h2>
+
+    <p>
+        This page is deployed automatically from the
+        <strong>dev</strong> branch using Jenkins Pipeline.
+    </p>
+
+    <div class="status">
+        DEV BRANCH DEPLOYMENT SUCCESSFUL
+    </div>
+
+    <footer>
+        CI/CD Demo Project | GitHub Webhook | Jenkins | IIS
+    </footer>
+
+</div>
+
+</body>
+</html>
