@@ -1,32 +1,13 @@
-pipeline {
-    agent any
+stage('Deploy to Local Server') {
+    steps {
+        script {
+            def branch = env.GIT_BRANCH.tokenize('/').last()
+            def deployPath = "C:\\inetpub\\wwwroot\\${branch}"
 
-    stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Deploy to Local Server') {
-            steps {
-                script {
-                    def branch = env.GIT_BRANCH.tokenize('/').last()
-
-                    bat """
-                    if not exist "C:\\Deploy\\${branch}" mkdir "C:\\Deploy\\${branch}"
-
-                    xcopy /E /I /Y * "C:\\Deploy\\${branch}\\"
-                    """
-                }
-            }
-        }
-
-        stage('Verify') {
-            steps {
-                bat 'dir C:\\Deploy'
-            }
+            bat """
+            if not exist "${deployPath}" mkdir "${deployPath}"
+            xcopy /E /I /Y * "${deployPath}\\"
+            """
         }
     }
 }
