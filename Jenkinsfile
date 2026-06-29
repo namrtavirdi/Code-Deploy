@@ -9,15 +9,24 @@ pipeline {
             }
         }
 
-        stage('Deploy to IIS') {
+        stage('Deploy Based on Branch') {
             steps {
                 script {
 
-                    // Get the current branch name
-                    def branch = env.GIT_BRANCH.tokenize('/').last()
+                    def branch = env.GIT_BRANCH ?: ''
+                    def deployPath = ""
 
-                    // IIS deployment path
-                    def deployPath = "C:\\inetpub\\wwwroot\\${branch}"
+                    echo "Current Branch: ${branch}"
+
+                    if (branch.contains('main')) {
+                        deployPath = "C:\\inetpub\\wwwroot\\main"
+                    }
+                    else if (branch.contains('dev')) {
+                        deployPath = "C:\\inetpub\\wwwroot\\dev"
+                    }
+                    else {
+                        error("Branch not configured.")
+                    }
 
                     bat """
                     if not exist "${deployPath}" mkdir "${deployPath}"
@@ -27,9 +36,35 @@ pipeline {
             }
         }
 
+        stage('Display Branch Content') {
+            steps {
+                script {
+
+                    def branch = env.GIT_BRANCH ?: ''
+
+                    if (branch.contains('main')) {
+
+                        bat '''
+                        echo ===== MAIN BRANCH =====
+                        type C:\\inetpub\\wwwroot\\main\\index.html
+                        '''
+
+                    } else if (branch.contains('dev')) {
+
+                        bat '''
+                        echo ===== DEV BRANCH =====
+                        type C:\\inetpub\\wwwroot\\dev\\index.html
+                        '''
+
+                    }
+                }
+            }
+        }
+
         stage('Verify Deployment') {
             steps {
                 script {
+
                     def branch = env.GIT_BRANCH.tokenize('/').last()
 
                     bat """
